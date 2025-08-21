@@ -1,3 +1,6 @@
+**Description**
+-Simple Task Manager to practice connecting API Endpoints, Frontend (Next.js) + Backend (Java, Spring Boot).
+
 ***RUN BACKEND***
 cd backend\taskmanager
 mvn spring-boot:run
