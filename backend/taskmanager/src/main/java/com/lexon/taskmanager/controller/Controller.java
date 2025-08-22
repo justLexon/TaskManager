@@ -48,8 +48,8 @@ public class Controller {
 
     //Deletes
     @DeleteMapping("/tasks/{id}")
-    public String deleteTask(@PathVariable int newId) {
-        tasks.removeIf(task -> task.getId() == newId);
-        return "Task " + newId + " Deleted";
+    public String deleteTask(@PathVariable int id) {
+        tasks.removeIf(task -> task.getId() == id);
+        return "Task " + id + " Deleted";
     }
 }
