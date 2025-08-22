@@ -1,12 +1,16 @@
 package com.lexon.taskmanager.controller;
 
 import com.lexon.taskmanager.model.*;
+import com.lexon.taskmanager.service.TaskRepository;
+
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,34 +26,45 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class Controller {
 
     //Fields
-     private List<Task> tasks = new ArrayList<>(
-        List.of( 
-            new Task(1, "Write", false),
-            new Task(2, "Read", false),
-            new Task(3, "Workout", true)
-            )
-        );
+    @Autowired
+    private TaskRepository taskRepository;
+
+    // private List<Task> tasks = new ArrayList<>(
+    //     List.of( 
+    //         new Task(1, "Write", false),
+    //         new Task(2, "Read", false),
+    //         new Task(3, "Workout", true)
+    //         )
+    //     );
 
 
     //Gets
     @GetMapping("/tasks")
     public List<Task> getTasks() {
-        return tasks;
+        return taskRepository.findAll();
     }
     
 
     //Posts
     @PostMapping("/tasks")
     public Task addTask(@RequestBody Task newTask) {
-        tasks.add(newTask);
-        return newTask;
+        // tasks.add(newTask);
+        // return newTask;
+        return taskRepository.save(newTask);
     }
     
 
     //Deletes
     @DeleteMapping("/tasks/{id}")
-    public String deleteTask(@PathVariable int id) {
-        tasks.removeIf(task -> task.getId() == id);
-        return "Task " + id + " Deleted";
+    public String deleteTask(@PathVariable Integer id) {
+        // tasks.removeIf(task -> task.getId() == id);
+        // return "Task " + id + " Deleted";
+        Optional<Task> task = taskRepository.findById(id);
+        if(task.isPresent()) {
+            taskRepository.deleteById(id);
+            return "Task " + id + " deleted";
+        } else {
+            return "Task " + id + " not found";
+        }
     }
 }
